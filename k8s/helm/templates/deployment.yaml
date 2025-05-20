@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tc31-mtp
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: tc31-mtp
+  template:
+    metadata:
+      labels:
+        app: tc31-mtp
+    spec:
+      containers:
+        - name: tc31-mtp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            {{- range .Values.service.ports }}
+            - containerPort: {{ .targetPort }}
+              name: {{ .name }}
+              protocol: TCP
+            {{- end }}
+          volumeMounts:
+            - name: hugepages
+              mountPath: /dev/hugepages
+            - name: license
+              mountPath: /etc/TwinCAT/3.1/Target/License
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+          securityContext:
+            capabilities:
+              add: ["SYS_NICE"]
+      volumes:
+        - name: hugepages
+          hostPath:
+            path: /dev/hugepages
+        - name: license
+          hostPath:
+            path: {{ .Values.volumes.licenseHostPath }}
+            type: Directory

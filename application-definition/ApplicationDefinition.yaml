@@ -1,0 +1,15 @@
+apiVersion: apps.kubermatic.k8c.io/v1
+kind: ApplicationDefinition
+metadata:
+  name: tc31-mtp
+spec:
+  description: Beckhoff TwinCAT 3.1 MTP
+  method: helm
+  versions:
+    - template:
+        source:
+          helm:
+            chartName: tc31-mtp-chart
+            chartVersion: 0.1.0
+            url: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat
+      version: 0.1.0

@@ -1,0 +1,34 @@
+replicaCount: 1
+
+image:
+  repository: flecsbikubernetes.azurecr.io/beckhoff/tc31-mtp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  ports:
+    - name: port2020
+      port: 2020
+      targetPort: 2020
+    - name: port2010
+      port: 2010
+      targetPort: 2010
+    - name: port4840
+      port: 4840
+      targetPort: 4840
+
+env:
+  - name: PCI_DEVICES
+    value: "NONE"
+
+volumes:
+  licenseHostPath: /absolute/path/to/License  # update as needed
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
