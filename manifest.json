@@ -1,37 +1,22 @@
 {
     "$schema": "https://raw.githubusercontent.com/FLECS-Technologies/app-sdk/main/manifest.schema.json",
     "_schemaVersion": "2.0.0",
-    "app": "",
+    "app": "com.beckhoff.twincat",
     "version": "##VERSION##",
     "revision": "0",
-    "image": "flecs.azurecr.io/",
+    "image": "flecs.azurecr.io/com.beckhoff.twincat",
     "multiInstance": false,
-    "editor": "",
-    "args": [
-        "--launch-arg-1",
-        "--launch-arg-2=8000"
-    ],
-    "capabilities": [],
-    "conffiles": [
-        "default.conf:/etc/my-app/default.conf",
-        "default.conf:/etc/my-app/default.conf:ro",
-        "default.conf:/etc/my-app/default.conf:rw"
-    ],
-    "devices": [
-        "/dev/net/tun"
-    ],
-    "env": [
-        "MY_ENV=value"
-    ],
+    "capabilities": ["SYS_NICE"],
     "ports": [
-        "12345:12345"
+        "2020:2020",
+        "2010:2010",
+        "4840:4840"
     ],
     "volumes": [
-        "my-app-etc:/etc/my-app",
-        "/var/lib/my-app:/var/lib/my-app"
+        "/dev/hugepages:/dev/hugepages",
+        "./License/:/etc/TwinCAT/3.1/Target/License/"
     ],
-    "labels": [
-        "org.my.label",
-        "org.my.label-with-value=Some custom label value"
+    "envs": [
+        "PCI_DEVICES=NONE"
     ]
 }
