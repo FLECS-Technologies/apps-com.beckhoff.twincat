@@ -2,7 +2,7 @@ ARG ARCH
 ARG VERSION
 ARG VARIANT
 
-FROM scratch:${VERSION}
+FROM flecsbikubernetes.azurecr.io/beckhoff/tc31-mtp:${VERSION}
 
 ARG ARCH
 ARG VERSION
