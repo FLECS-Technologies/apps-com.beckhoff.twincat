@@ -11,5 +11,5 @@ spec:
           helm:
             chartName: tc31-mtp-chart
             chartVersion: 0.1.0
-            url: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat
+            url: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat/tree/e82289c73ecdf8bc394581ffa02a91d1ca7c6cbf/k8s/helm
       version: 0.1.0
