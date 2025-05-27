@@ -1,6 +1,6 @@
 apiVersion: v2
 name: tc31-mtp-chart
-description: Helm chart for TwinCAT 3.1 MTP container
+description: Helm chart for TwinCAT 3.1 MTP and Mosquitto
 type: application
-version: 0.1.0
+version: 0.2.0
 appVersion: "latest"
