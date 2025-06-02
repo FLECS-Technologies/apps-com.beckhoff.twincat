@@ -8,8 +8,9 @@ spec:
     app: tc31-mtp
   ports:
     - port: {{ .Values.service.mosquitto.port }}
-      targetPort: {{ .Values.service.mosquitto.port }}
+      targetPort: {{ .Values.service.mosquitto.targetPort }}
       protocol: TCP
+      nodePort: {{ .Values.service.mosquitto.nodePort }}
       name: mqtt
 
 ---
