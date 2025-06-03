@@ -12,6 +12,10 @@ spec:
       labels:
         app: tc31-mtp
     spec:
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: mosquitto
           image: "{{ .Values.images.mosquitto.repository }}:{{ .Values.images.mosquitto.tag }}"

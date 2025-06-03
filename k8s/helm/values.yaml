@@ -33,15 +33,19 @@ env:
   - name: PCI_DEVICES
     value: 'NONE'
 
-### host path at edge devices is mapped into /volumes-data
+### Ensure Node Alignment
+# label to matching node wiht initalized volumes (Currently only hostpath storage available)
+# how to label a node: kubectl label node NODE_NAME type=beckhoff-node-1
+nodeSelector:
+  type: beckhoff-node-1
+### Host Volume paths
+# host path at edge devices is mapped into /volumes-data
 volumes:
   licenseHostPath: /volumes-data/beckhoff/license
   # contains e.g.: mosquitto.conf
   mosquittoConfPath: /volumes-data/beckhoff/mosquitto
 
 resources: {}
-
-nodeSelector: {}
 
 tolerations: []
 
