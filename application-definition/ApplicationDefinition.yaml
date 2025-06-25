@@ -10,6 +10,71 @@ spec:
         source:
           helm:
             chartName: tc31-mtp-chart
-            chartVersion: 0.1.0
-            url: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat/tree/e82289c73ecdf8bc394581ffa02a91d1ca7c6cbf/k8s/helm
-      version: 0.1.0
+            chartVersion: 0.0.5
+            url: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat/tree/0.0.5/k8s/helm
+      version: 0.0.5
+  defaultValuesBlock: |
+    replicaCount: 1
+    
+    images:
+      mosquitto:
+        repository: eclipse-mosquitto
+        tag: latest
+        pullPolicy: IfNotPresent
+      tc31:
+        repository: flecsbikubernetes.azurecr.io/beckhoff/tc31-mtp
+        tag: 0.0.5
+        pullPolicy: IfNotPresent
+    
+    service:
+      mosquitto:
+        type: NodePort
+        port: 1883 # cluster internal port
+        targetPort: 1883 # container target port
+        nodePort: 30083 # port opend at k8s node, currently something between 30000-30100
+      tc31:
+        type: ClusterIP
+        ports:
+          - name: port2020
+            port: 2020
+            targetPort: 2020
+          - name: port2010
+            port: 2010
+            targetPort: 2010
+          - name: port4840
+            port: 4840
+            targetPort: 4840
+    
+    env:
+      - name: PCI_DEVICES
+        value: 'NONE'
+    
+    ### Ensure Node Alignment
+    # label to matching node wiht initalized volumes (Currently only hostpath storage available)
+    # how to label a node: kubectl label node NODE_NAME type=beckhoff-node-1
+    nodeSelector:
+      type: beckhoff-node-1
+    ### Host Volume paths
+    # host path at edge devices is mapped into /volumes-data
+    volumes:
+      licenseHostPath: /volumes-data/beckhoff/license
+      # contains e.g.: mosquitto.conf
+      mosquittoConfPath: /volumes-data/beckhoff/mosquitto
+    
+    resources: {}
+      # We usually recommend not to specify default resources
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+    
+    tolerations: []
+    
+    affinity: {}
+    
+    securityContext:
+      capabilities:
+        add: ["SYS_NICE"]
+      privileged: true

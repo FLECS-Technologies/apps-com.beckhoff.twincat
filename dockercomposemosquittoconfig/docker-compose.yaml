@@ -1,0 +1,51 @@
+networks:
+  container-network:
+    name: container-network
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.20.0/24
+          gateway: 192.168.20.1
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    hostname: mosquitto
+    ports:
+      - "1883:1883"
+    restart: unless-stopped
+    volumes:
+      - ./simple-mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      container-network:
+        ipv4_address: 192.168.20.2
+
+  tc31-mtp1:
+    image: flecsbikubernetes.azurecr.io/beckhoff/tc31-mtp:latest
+    container_name: tc31-mtp1
+    hostname: tc31-mtp1
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    privileged: false
+    cap_add:
+      - SYS_NICE
+    volumes:
+      - /dev/hugepages:/dev/hugepages
+      - ./License/:/etc/TwinCAT/3.1/Target/License/
+    ports:
+      - 2020:2020/tcp
+      - 2010:2010/tcp
+      - 4840:4840/tcp
+    networks:
+      container-network:
+        ipv4_address: 192.168.20.3
+    # Use PCI_DEVICES as environment variables to specify the Ethernet
+    # controllers which can be used by the TwinCAT runtime for real-time
+    # ethernet communication. If PCI_DEVICES is not provided at all,
+    # TwinCAT will probe all available Ethernet controllers of the host
+    # which have vfio-pci assigned as kernel drivers
+    # For example: PCI_DEVICES=0000:02:00.0
+    environment:
+      - PCI_DEVICES=NONE

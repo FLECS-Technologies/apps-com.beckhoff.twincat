@@ -12,10 +12,6 @@ spec:
       labels:
         app: tc31-mtp
     spec:
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       containers:
         - name: mosquitto
           image: "{{ .Values.images.mosquitto.repository }}:{{ .Values.images.mosquitto.tag }}"
@@ -40,13 +36,27 @@ spec:
           volumeMounts:
             - name: hugepages
               mountPath: /dev/hugepages
+              #CHECK mount permisions
             - name: license
               mountPath: /etc/TwinCAT/3.1/Target/License
           env:
             {{- toYaml .Values.env | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
           securityContext:
-            capabilities:
-              add: ["SYS_NICE"]
+            {{- toYaml .Values.securityContext | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
         - name: hugepages
           hostPath:

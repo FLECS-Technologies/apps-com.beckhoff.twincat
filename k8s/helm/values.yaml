@@ -7,7 +7,7 @@ images:
     pullPolicy: IfNotPresent
   tc31:
     repository: flecsbikubernetes.azurecr.io/beckhoff/tc31-mtp
-    tag: latest
+    tag: 0.0.5
     pullPolicy: IfNotPresent
 
 service:
@@ -46,7 +46,19 @@ volumes:
   mosquittoConfPath: /volumes-data/beckhoff/mosquitto
 
 resources: {}
+  # We usually recommend not to specify default resources
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 tolerations: []
 
 affinity: {}
+
+securityContext:
+  capabilities:
+    add: ["SYS_NICE"]
+  privileged: true
