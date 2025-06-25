@@ -1,18 +1,22 @@
 apiVersion: apps.kubermatic.k8c.io/v1
 kind: ApplicationDefinition
 metadata:
-  name: tc31-mtp
+  name: bechkhoff-twincat
 spec:
-  description: Beckhoff TwinCAT 3.1 MTP
+  displayName: Beckhoff TwinCAT 3.1 MTP
+  description: TwinCAT Engineering offers the possibility to create, modify and manage the MTP as well as the source code of the PLC in one environment.
   method: helm
   versions:
     - template:
         source:
-          helm:
-            chartName: tc31-mtp-chart
-            chartVersion: 0.0.5
-            url: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat/tree/0.0.5/k8s/helm
+          git:
+            path: k8s/helm
+            ref:
+              tag: 0.0.5
+            remote: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat.git
       version: 0.0.5
+  documentationURL: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat
+  sourceURL: https://github.com/FLECS-Technologies/apps-com.beckhoff.twincat/tree/main/k8s/helm
   defaultValuesBlock: |
     replicaCount: 1
     
