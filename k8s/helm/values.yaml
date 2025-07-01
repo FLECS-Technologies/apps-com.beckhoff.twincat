@@ -45,7 +45,8 @@ volumes:
   # contains e.g.: mosquitto.conf
   mosquittoConfPath: /volumes-data/beckhoff/mosquitto
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources
   # limits:
   #   cpu: 100m
@@ -60,5 +61,10 @@ affinity: {}
 
 securityContext:
   capabilities:
-    add: ["SYS_NICE"]
+    add: ['SYS_NICE']
   privileged: true
+
+### Node-RED as OPC UA Gateway service. Change the tag "staging" --> "prod" depending on the target cluster.
+nodered:
+  name: nodered
+  image: flecsbikubernetes.azurecr.io/nodered/salut:prod
