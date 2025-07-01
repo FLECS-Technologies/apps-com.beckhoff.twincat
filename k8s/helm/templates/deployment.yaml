@@ -13,7 +13,7 @@ spec:
         app: tc31-mtp
     spec:
       containers:
-      - name: {{ .Values.nodered.name }}
+        - name: {{ .Values.nodered.name }}
           image: {{ .Values.nodered.image }}
         - name: mosquitto
           image: "{{ .Values.images.mosquitto.repository }}:{{ .Values.images.mosquitto.tag }}"
